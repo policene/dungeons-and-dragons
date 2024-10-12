@@ -1,24 +1,33 @@
 package com.example.aplicacao_ofc.distribuctions
 
+import Atributos
+import Personagem
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.aplicacao_ofc.CharacterCreation
+import com.example.aplicacao_ofc.CharacterSummary
 import com.example.aplicacao_ofc.R
 
 class FreeDistribuction : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pointdistribuction)
+        setContentView(R.layout.activity_freedistribuction)
+
+
+
+        val personagem = intent.getSerializableExtra("personagem") as Personagem
+        // Declarando a variável Atributos do Backend.
+
+        var atributos_personagem = Atributos()
+
 
         // Declarando os elementos do .xml
-
         val return_button = findViewById<ImageButton>(R.id.return_button)
-
 
         val for_up = findViewById<Button>(R.id.for_up)
         val for_down = findViewById<Button>(R.id.for_down)
@@ -54,254 +63,180 @@ class FreeDistribuction : ComponentActivity() {
         val output_mod_sab = findViewById<TextView>(R.id.mod_sab)
         val output_mod_car = findViewById<TextView>(R.id.mod_car)
 
+        val continuar = findViewById<Button>(R.id.continuar)
 
-        val help_button = findViewById<ImageButton>(R.id.help_button)
-        val info_hp = findViewById<TextView>(R.id.info_hp)
 
         val redefinir = findViewById<Button>(R.id.redefinir)
 
-        // Declarando as variáveis iniciais dos atributos do usuário
-        var forca : Int = 8
-        var destreza : Int = 8
-        var constituicao : Int = 8
-        var inteligencia : Int = 8
-        var sabedoria : Int = 8
-        var carisma : Int = 8
 
         // Declarando os pontos para distribuição
-
-        var pontos_restantes : Int = 20
-
-
-        // Setando o output dos pontos restantes
-
+        var pontos_restantes : Int = 16
         output_pontos_restantes.text = pontos_restantes.toString()
 
-        // Método para retornar à pagina anterior.
+        // Funções para calcular modificador e vida
+        fun atualizarUI() {
+            output_for.text = atributos_personagem.forca.toString()
+            output_des.text = atributos_personagem.destreza.toString()
+            output_con.text = atributos_personagem.constituicao.toString()
+            output_int.text = atributos_personagem.inteligencia.toString()
+            output_sab.text = atributos_personagem.sabedoria.toString()
+            output_car.text = atributos_personagem.carisma.toString()
 
-        return_button.setOnClickListener {
-            val intent = Intent(this, CharacterCreation::class.java)
-            startActivity(intent)
+            output_mod_for.text = atributos_personagem.modificador[atributos_personagem.forca].toString()
+            output_mod_des.text = atributos_personagem.modificador[atributos_personagem.destreza].toString()
+            output_mod_con.text = atributos_personagem.modificador[atributos_personagem.constituicao].toString()
+            output_mod_int.text = atributos_personagem.modificador[atributos_personagem.inteligencia].toString()
+            output_mod_sab.text = atributos_personagem.modificador[atributos_personagem.sabedoria].toString()
+            output_mod_car.text = atributos_personagem.modificador[atributos_personagem.carisma].toString()
+
+            atributos_personagem.calcularVida()
+            output_hp.text = atributos_personagem.vida.toString()
         }
 
-        // Métodos para incrementar
-
+        // Aumentar e diminuir força
         for_up.setOnClickListener {
             if (pontos_restantes > 0) {
-                forca += 1
-                output_for.text = forca.toString()
+                atributos_personagem.forca += 1
                 pontos_restantes -= 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(forca, output_mod_for)
+                atualizarUI()
             }
         }
-
-
-
-        des_up.setOnClickListener {
-            if (pontos_restantes > 0){
-                destreza += 1
-                output_des.text = destreza.toString()
-                pontos_restantes -= 1
-                output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(destreza, output_mod_des)
-            }
-        }
-
-        con_up.setOnClickListener {
-            if(pontos_restantes > 0){
-                constituicao += 1
-                output_con.text = constituicao.toString()
-                pontos_restantes -= 1
-                output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(constituicao, output_mod_con)
-                calcularVida(constituicao, output_mod_con, output_hp)
-            }
-        }
-
-        int_up.setOnClickListener {
-            if (pontos_restantes > 0){
-                inteligencia += 1
-                output_int.text = inteligencia.toString()
-                pontos_restantes -= 1
-                output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(inteligencia, output_mod_int)
-            }
-        }
-
-        sab_up.setOnClickListener {
-            if (pontos_restantes > 0){
-                sabedoria += 1
-                output_sab.text = sabedoria.toString()
-                pontos_restantes -= 1
-                output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(sabedoria, output_mod_sab)
-            }
-        }
-
-        car_up.setOnClickListener {
-            if (pontos_restantes > 0){
-                carisma += 1
-                output_car.text = carisma.toString()
-                pontos_restantes -= 1
-                output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(carisma, output_mod_car)
-            }
-        }
-
-        // Métodos para diminuir
 
         for_down.setOnClickListener {
-            if (forca != 8 && pontos_restantes != 20){
-                forca -= 1
-                output_for.text = forca.toString()
+            if (atributos_personagem.forca > 8) {
+                atributos_personagem.forca -= 1
                 pontos_restantes += 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(forca, output_mod_for)
+                atualizarUI()
+            }
+        }
+
+        // Aumentar e diminuir destreza
+        des_up.setOnClickListener {
+            if (pontos_restantes > 0) {
+                atributos_personagem.destreza += 1
+                pontos_restantes -= 1
+                output_pontos_restantes.text = pontos_restantes.toString()
+                atualizarUI()
             }
         }
 
         des_down.setOnClickListener {
-            if (destreza != 8 && pontos_restantes != 20) {
-                destreza -= 1
-                output_des.text = destreza.toString()
+            if (atributos_personagem.destreza > 8) {
+                atributos_personagem.destreza -= 1
                 pontos_restantes += 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(destreza, output_mod_des)
+                atualizarUI()
+            }
+        }
+
+        // Aumentar e diminuir constituição
+        con_up.setOnClickListener {
+            if (pontos_restantes > 0) {
+                atributos_personagem.constituicao += 1
+                pontos_restantes -= 1
+                output_pontos_restantes.text = pontos_restantes.toString()
+                atualizarUI()
             }
         }
 
         con_down.setOnClickListener {
-            if (constituicao != 8 && pontos_restantes != 20) {
-                constituicao -= 1
-                output_con.text = constituicao.toString()
+            if (atributos_personagem.constituicao > 8) {
+                atributos_personagem.constituicao -= 1
                 pontos_restantes += 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(constituicao, output_mod_con)
-                calcularVida(constituicao, output_mod_con, output_hp)
+                atualizarUI()
+            }
+        }
+
+        // Aumentar e diminuir inteligência
+        int_up.setOnClickListener {
+            if (pontos_restantes > 0) {
+                atributos_personagem.inteligencia += 1
+                pontos_restantes -= 1
+                output_pontos_restantes.text = pontos_restantes.toString()
+                atualizarUI()
             }
         }
 
         int_down.setOnClickListener {
-            if (inteligencia != 8 && pontos_restantes != 20) {
-                inteligencia -= 1
-                output_int.text = inteligencia.toString()
+            if (atributos_personagem.inteligencia > 8) {
+                atributos_personagem.inteligencia -= 1
                 pontos_restantes += 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(inteligencia, output_mod_int)
+                atualizarUI()
+            }
+        }
+
+        // Aumentar e diminuir sabedoria
+        sab_up.setOnClickListener {
+            if (pontos_restantes > 0) {
+                atributos_personagem.sabedoria += 1
+                pontos_restantes -= 1
+                output_pontos_restantes.text = pontos_restantes.toString()
+                atualizarUI()
             }
         }
 
         sab_down.setOnClickListener {
-            if (sabedoria != 8 && pontos_restantes != 20) {
-                sabedoria -= 1
-                output_sab.text = sabedoria.toString()
+            if (atributos_personagem.sabedoria > 8) {
+                atributos_personagem.sabedoria -= 1
                 pontos_restantes += 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(sabedoria, output_mod_sab)
+                atualizarUI()
+            }
+        }
+
+        // Aumentar e diminuir carisma
+        car_up.setOnClickListener {
+            if (pontos_restantes > 0) {
+                atributos_personagem.carisma += 1
+                pontos_restantes -= 1
+                output_pontos_restantes.text = pontos_restantes.toString()
+                atualizarUI()
             }
         }
 
         car_down.setOnClickListener {
-            if (carisma != 8 && pontos_restantes != 20) {
-                carisma -= 1
-                output_car.text = carisma.toString()
+            if (atributos_personagem.carisma > 8) {
+                atributos_personagem.carisma -= 1
                 pontos_restantes += 1
                 output_pontos_restantes.text = pontos_restantes.toString()
-                calcularModificador(carisma, output_mod_car)
+                atualizarUI()
             }
         }
 
+
+        // Redefinir atributos
         redefinir.setOnClickListener {
-            pontos_restantes = 20
-            output_pontos_restantes.text = 20.toString()
-            forca = 8
-            output_for.text = 8.toString()
-            destreza = 8
-            output_des.text = 8.toString()
-            constituicao = 8
-            output_con.text = 8.toString()
-            inteligencia = 8
-            output_int.text = 8.toString()
-            sabedoria = 8
-            output_sab.text = 8.toString()
-            carisma = 8
-            output_car.text = 8.toString()
-
-            output_hp.text = 9.toString()
-
-            output_mod_for.text = (-1).toString()
-            output_mod_des.text = (-1).toString()
-            output_mod_con.text = (-1).toString()
-            output_mod_int.text = (-1).toString()
-            output_mod_sab.text = (-1).toString()
-            output_mod_car.text = (-1).toString()
-
+            pontos_restantes = 16
+            output_pontos_restantes.text = pontos_restantes.toString()
+            atributos_personagem.forca = 8
+            atributos_personagem.destreza = 8
+            atributos_personagem.constituicao = 8
+            atributos_personagem.inteligencia = 8
+            atributos_personagem.sabedoria = 8
+            atributos_personagem.carisma = 8
+            atualizarUI()
         }
 
-        // Função para alterar a visibilidade do texto de ajuda.
+        // Método para retornar à página anterior
+        return_button.setOnClickListener {
+            val resultIntent = Intent()
+            resultIntent.putExtra("key", "value")
+            setResult(RESULT_OK, resultIntent)
+            finish()
+        }
 
-        help_button.setOnClickListener {
-            if(info_hp.visibility == View.INVISIBLE){
-                info_hp.visibility = View.VISIBLE
-            } else {
-                info_hp.visibility = View.INVISIBLE
-            }
+        // Método para prosseguir para a página seguinte e atribuir os atributos ao personagem.
+        continuar.setOnClickListener{
+            personagem.atributos = atributos_personagem
+            personagem.aplicarBonusRaca()
+            val intent = Intent(this, CharacterSummary::class.java)
+            intent.putExtra("personagem", personagem)
+            startActivity(intent)
         }
 
     }
-
-    // Função para retornar o modificador do atributo
-
-    fun calcularModificador(atributo: Int, output_mod : TextView){
-        val retorno = when(atributo){
-            in 6..7 -> "-2"
-            in 8..9 -> "-1"
-            in 10..11 -> "0"
-            in 12..13 -> "+1"
-            in 14..15-> "+2"
-            in 16..17 -> "+3"
-            in 18..19 -> "+4"
-            in 20..21 -> "+5"
-            in 22..23 -> "+6"
-            in 24..25 -> "+7"
-            in 26..27 -> "+8"
-            in 28..29 -> "+9"
-            30 -> "+10"
-            else -> {"Inválido."}
-        }
-        output_mod.text = retorno
-    }
-
-    // Função para calcular o HP
-
-    fun calcularVida(constituicao: Int, output_mod_con: TextView, output_hp: TextView){
-        val modificador = when(constituicao){
-            in 6..7 -> -2
-            in 8..9 -> -1
-            in 10..11 -> 0
-            in 12..13 -> 1
-            in 14..15-> 2
-            in 16..17 -> 3
-            in 18..19 -> 4
-            in 20..21 -> 5
-            in 22..23 -> 6
-            in 24..25 -> 7
-            in 26..27 -> 8
-            in 28..29 -> 9
-            30 -> 10
-            else -> null
-
-        }
-        val vida = 10 + modificador!!
-        output_hp.text = vida.toString()
-
-    }
-
-
-
-
-
-
-
 }

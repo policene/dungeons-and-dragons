@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F8F8F8">
 
 
     <TextView
@@ -59,8 +60,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/div_info"
-        android:layout_width="285dp"
-        android:layout_height="298dp"
+        android:layout_width="305dp"
+        android:layout_height="313dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="#FFFFFF"
@@ -84,20 +85,22 @@
 
         <EditText
             android:id="@+id/nome_input"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="45dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:singleLine="true"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/nome_output"
             app:layout_constraintTop_toBottomOf="@+id/greetings" />
 
         <TextView
             android:id="@+id/nome_output"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/aclonica"
             android:text="Nome:"
@@ -106,22 +109,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/greetings" />
 
-        <EditText
-            android:id="@+id/raca_input"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:layout_marginEnd="24dp"
-            android:singleLine="true"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nome_input" />
-
         <TextView
             android:id="@+id/raca_output"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:fontFamily="@font/aclonica"
             android:text="Raça:"
             android:textColor="@color/red_dd"
@@ -129,24 +122,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nome_output" />
 
-        <EditText
-            android:id="@+id/classe_input"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="24dp"
-            android:singleLine="true"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/classe_output"
-            app:layout_constraintTop_toBottomOf="@+id/raca_input" />
-
         <TextView
             android:id="@+id/classe_output"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/aclonica"
             android:text="Classe:"
             android:textColor="@color/red_dd"
@@ -166,6 +147,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/race_spinner"
+            android:layout_width="200dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="24dp"
+            android:dropDownHeight="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/nome_input"
+            app:layout_constraintStart_toStartOf="@+id/nome_input"
+            app:layout_constraintTop_toBottomOf="@+id/nome_input" />
+
+        <Spinner
+            android:id="@+id/class_spinner"
+            android:layout_width="200dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="24dp"
+
+            app:layout_constraintEnd_toEndOf="@+id/race_spinner"
+            app:layout_constraintStart_toStartOf="@+id/race_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/race_spinner" />
+
+        <TextView
+            android:id="@+id/buffs_raca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alatsi"
+            android:text="+1 FOR, +1 DES"
+            android:textColor="@color/red_dd"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="@+id/race_spinner"
+            app:layout_constraintStart_toStartOf="@+id/race_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/race_spinner" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

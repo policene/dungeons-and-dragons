@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "aplicacao_ofc"
 include(":app")
+include(":dungeonsBackend")
