@@ -54,7 +54,6 @@ class CharacterSummary : ComponentActivity() {
         int_output.text = personagem.atributos.inteligencia.toString()
         sab_output.text = personagem.atributos.sabedoria.toString()
         car_output.text = personagem.atributos.carisma.toString()
-        vida_output.text = personagem.atributos.vida.toString()
 
         mod_out_for.text = personagem.atributos.modificador[personagem.atributos.forca].toString()
         mod_out_des.text = personagem.atributos.modificador[personagem.atributos.destreza].toString()
@@ -62,6 +61,8 @@ class CharacterSummary : ComponentActivity() {
         mod_out_int.text = personagem.atributos.modificador[personagem.atributos.inteligencia].toString()
         mod_out_sab.text = personagem.atributos.modificador[personagem.atributos.sabedoria].toString()
         mod_out_car.text = personagem.atributos.modificador[personagem.atributos.carisma].toString()
+
+        vida_output.text = personagem.atributos.vida.toString()
 
 
         return_button.setOnClickListener {

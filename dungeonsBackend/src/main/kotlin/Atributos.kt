@@ -9,7 +9,7 @@ class Atributos (
     var inteligencia: Int = 8,
     var sabedoria: Int = 8,
     var carisma: Int = 8,
-    var vida: Int = 0,
+    var vida: Int = 9,
 
     var modificador: Map<Int, Int> = mapOf(
         1 to -5,
